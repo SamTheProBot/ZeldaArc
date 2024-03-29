@@ -2,10 +2,8 @@
 const canvas = document.querySelector(`#canvas1`);
 const ctx = canvas.getContext(`2d`);
 
-const canvasWidth = (canvas.width = 1300);
-const canvasHeight = (canvas.height = 800);
-// const canvasWidth = (canvas.width = 900);
-// const canvasHeight = (canvas.height = 750);
+const canvasWidth = (canvas.width = 1250);
+const canvasHeight = (canvas.height = 900);
 
 const offset = {
   positionX: -500,
@@ -13,16 +11,9 @@ const offset = {
 };
 
 const playerProperty = {
-  speed: 5,
-  frame: 0,
-  direction: 0,
-  gameframe: 0,
-  weaponX: 0,
-  weaponY: 0,
+  playerVelocity: 5,
   positionX: canvasWidth / 2 - 16,
   positionY: canvasHeight / 2 - 16,
-  moving: false,
-  attackAnimation: false,
 };
 
 const map = {
@@ -40,23 +31,21 @@ const keys = {
 
 const snake = new Enemy(
   `/NinjaAdventure/Actor/Monsters/Snake3/Snake3.png`,
-  playerProperty.frame,
   4,
   250,
   playerProperty.positionX,
   playerProperty.positionY
 );
-const animation = () => {
-  const player = new PlayerSpirit(
-    `./NinjaAdventure/Actor/Characters/BlueNinja/SpriteSheet.png`,
-    `./NinjaAdventure/Items/Weapons/Lance2/Sprite.png`,
-    playerProperty.positionX,
-    playerProperty.positionY,
-    playerProperty.frame,
-    playerProperty.direction,
-    playerProperty.attackAnimation
-  );
 
+const player = new PlayerSpirit(
+  `./NinjaAdventure/Actor/Characters/BlueNinja/SpriteSheet.png`,
+  `./NinjaAdventure/Items/Weapons/Lance2/Sprite.png`,
+  playerProperty.positionX,
+  playerProperty.positionY,
+  playerProperty.playerVelocity
+);
+
+const animation = () => {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
   switch (map.type) {
@@ -87,35 +76,32 @@ const animation = () => {
   Background.draw(offset);
 
   collisionBoundary.forEach((item) => item.draw());
-  if (playerProperty.moving && playerProperty.gameframe % (playerProperty.speed * 1.2) === 0) {
-    if (playerProperty.frame < 3) playerProperty.frame++;
-    else playerProperty.frame = 0;
-  }
-  playerProperty.gameframe++;
 
-  player.drawWeapon();
   player.draw();
+  player.movement();
 
   snake.positionX = offset.positionX + 1800 + snake.disX;
   snake.positionY = offset.positionY + 550 + snake.disY;
   snake.draw();
+  player.drawWeapon();
+
   if (snake.updatePosition()) {
     snake.movement();
     if (playerProperty.positionX > snake.positionX) {
-      snake.direction = 3;
       snake.disX += snake.velocity;
+      snake.direction = 3;
     }
     if (playerProperty.positionX < snake.positionX) {
-      snake.direction = 2;
       snake.disX -= snake.velocity;
+      snake.direction = 2;
     }
     if (playerProperty.positionY > snake.positionY) {
-      snake.direction = 0;
       snake.disY += snake.velocity;
+      snake.direction = 0;
     }
     if (playerProperty.positionY < snake.positionY) {
-      snake.direction = 1;
       snake.disY -= snake.velocity;
+      snake.direction = 1;
     }
   }
 
@@ -126,7 +112,7 @@ const animation = () => {
       if (
         CollisionDetection(player, {
           positionX: boundry.positionX,
-          positionY: boundry.positionY + playerProperty.speed,
+          positionY: boundry.positionY + playerProperty.playerVelocity,
         })
       ) {
         collisionDetected = true;
@@ -134,7 +120,7 @@ const animation = () => {
       }
     }
     if (!collisionDetected) {
-      offset.positionY += playerProperty.speed;
+      offset.positionY += playerProperty.playerVelocity;
     }
   }
   if (keys.PresssedA) {
@@ -143,7 +129,7 @@ const animation = () => {
       const boundry = collisionBoundary[i];
       if (
         CollisionDetection(player, {
-          positionX: boundry.positionX + playerProperty.speed,
+          positionX: boundry.positionX + playerProperty.playerVelocity,
           positionY: boundry.positionY,
         })
       ) {
@@ -152,7 +138,7 @@ const animation = () => {
       }
     }
     if (!collisionDetected) {
-      offset.positionX += playerProperty.speed;
+      offset.positionX += playerProperty.playerVelocity;
     }
   }
   if (keys.PresssedS) {
@@ -162,7 +148,7 @@ const animation = () => {
       if (
         CollisionDetection(player, {
           positionX: boundry.positionX,
-          positionY: boundry.positionY - playerProperty.speed,
+          positionY: boundry.positionY - playerProperty.playerVelocity,
         })
       ) {
         collisionDetected = true;
@@ -170,7 +156,7 @@ const animation = () => {
       }
     }
     if (!collisionDetected) {
-      offset.positionY -= playerProperty.speed;
+      offset.positionY -= playerProperty.playerVelocity;
     }
   }
   if (keys.PresssedD) {
@@ -179,7 +165,7 @@ const animation = () => {
       const boundry = collisionBoundary[i];
       if (
         CollisionDetection(player, {
-          positionX: boundry.positionX - playerProperty.speed,
+          positionX: boundry.positionX - playerProperty.playerVelocity,
           positionY: boundry.positionY,
         })
       ) {
@@ -188,11 +174,11 @@ const animation = () => {
       }
     }
     if (!collisionDetected) {
-      offset.positionX -= playerProperty.speed;
+      offset.positionX -= playerProperty.playerVelocity;
     }
   }
   if (keys.PresssedSpace) {
-    console.log(player.passWeaponCoordinate());
+    console.log(`space`);
   }
   requestAnimationFrame(animation);
 };
@@ -202,27 +188,27 @@ window.addEventListener(`keypress`, function (e) {
   switch (e.key) {
     case `w`:
       keys.PresssedW = true;
-      playerProperty.moving = true;
-      playerProperty.direction = 1;
+      player.moving = true;
+      player.direction = 1;
       break;
     case `a`:
       keys.PresssedA = true;
-      playerProperty.moving = true;
-      playerProperty.direction = 2;
+      player.moving = true;
+      player.direction = 2;
       break;
     case `s`:
       keys.PresssedS = true;
-      playerProperty.moving = true;
-      playerProperty.direction = 0;
+      player.moving = true;
+      player.direction = 0;
       break;
     case `d`:
       keys.PresssedD = true;
-      playerProperty.moving = true;
-      playerProperty.direction = 3;
+      player.moving = true;
+      player.direction = 3;
       break;
     case ` `:
       keys.PresssedSpace = true;
-      playerProperty.attackAnimation = true;
+      player.attackAnimation = true;
       break;
   }
 });
@@ -231,23 +217,23 @@ window.addEventListener(`keyup`, function (e) {
   switch (e.key) {
     case `w`:
       keys.PresssedW = false;
-      playerProperty.moving = false;
+      player.moving = false;
       break;
     case `a`:
       keys.PresssedA = false;
-      playerProperty.moving = false;
+      player.moving = false;
       break;
     case `s`:
       keys.PresssedS = false;
-      playerProperty.moving = false;
+      player.moving = false;
       break;
     case `d`:
       keys.PresssedD = false;
-      playerProperty.moving = false;
+      player.moving = false;
       break;
     case ` `:
       keys.PresssedSpace = false;
-      playerProperty.attackAnimation = false;
+      player.attackAnimation = false;
       break;
   }
 });

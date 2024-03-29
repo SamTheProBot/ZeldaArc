@@ -1,25 +1,23 @@
 class Enemy {
-  constructor(imagesrc, frame, hp, range, playerX, playerY) {
+  constructor(imagesrc, hp, range, playerX, playerY) {
     this.image = new Image();
     this.image.src = imagesrc;
     this.damageEffect = new Image();
     this.damageEffect.src = `./NinjaAdventure/FX/SlashFx/CircularSlash/SpriteSheet.png`;
-    this.hp = hp;
-    this.prevHp = hp - 1;
-    this.range = range;
-    this.frame = frame;
-    this.direction = 0;
-    this.width = this.image.width / 4;
-    this.height = this.image.height / 4;
     this.playerX = playerX;
     this.playerY = playerY;
     this.positionX = 0;
     this.positionY = 0;
-    this.disX = 0;
-    this.disY = 0;
-    this.velocity = 1.5;
+    this.width = this.image.width / 4;
+    this.height = this.image.height / 4;
+    this.hp = hp;
+    this.prevHp = hp - 1;
+    this.attackDmg = 1;
+    this.range = range;
+    this.frame = 0;
     this.gameframe = 0;
-    this.damage = null;
+    this.direction = 0;
+    this.velocity = 1.5;
   }
 
   updatePosition() {
@@ -36,7 +34,6 @@ class Enemy {
   }
   draw() {
     if (this.hp === this.prevHp) {
-      // if (this.hp) {
       ctx.drawImage(
         this.damageEffect,
         this.frame * 32,
@@ -48,6 +45,7 @@ class Enemy {
         this.width * 4,
         this.height * 4
       );
+      this.prevHp--;
     }
     ctx.drawImage(
       this.image,
