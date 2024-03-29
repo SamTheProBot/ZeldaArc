@@ -14,7 +14,7 @@ class PlayerSpirit {
     this.width = this.image.width / 4;
     this.height = this.image.height / 6.5;
     this.hp = 10;
-    this.prevHp = hp - 1;
+    this.prevHp = this.hp - 1;
     this.attackDmg = 1;
     this.frame = 0;
     this.gameframe = 0;

@@ -2,8 +2,8 @@
 const canvas = document.querySelector(`#canvas1`);
 const ctx = canvas.getContext(`2d`);
 
-const canvasWidth = (canvas.width = 1250);
-const canvasHeight = (canvas.height = 900);
+const canvasWidth = (canvas.width = 1850);
+const canvasHeight = (canvas.height = 1300);
 
 const offset = {
   positionX: -500,
@@ -79,28 +79,28 @@ const animation = () => {
 
   player.draw();
   player.movement();
-
-  snake.positionX = offset.positionX + 1800 + snake.disX;
-  snake.positionY = offset.positionY + 550 + snake.disY;
-  snake.draw();
   player.drawWeapon();
+
+  snake.positionX = offset.positionX + 1800 + snake.offsetX;
+  snake.positionY = offset.positionY + 550 + snake.offsetY;
+  snake.draw();
 
   if (snake.updatePosition()) {
     snake.movement();
     if (playerProperty.positionX > snake.positionX) {
-      snake.disX += snake.velocity;
+      snake.offsetX += snake.velocity;
       snake.direction = 3;
     }
     if (playerProperty.positionX < snake.positionX) {
-      snake.disX -= snake.velocity;
+      snake.offsetX -= snake.velocity;
       snake.direction = 2;
     }
     if (playerProperty.positionY > snake.positionY) {
-      snake.disY += snake.velocity;
+      snake.offsetY += snake.velocity;
       snake.direction = 0;
     }
     if (playerProperty.positionY < snake.positionY) {
-      snake.disY -= snake.velocity;
+      snake.offsetY -= snake.velocity;
       snake.direction = 1;
     }
   }

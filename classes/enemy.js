@@ -8,6 +8,8 @@ class Enemy {
     this.playerY = playerY;
     this.positionX = 0;
     this.positionY = 0;
+    this.offsetX = 0;
+    this.offsetY = 0;
     this.width = this.image.width / 4;
     this.height = this.image.height / 4;
     this.hp = hp;
