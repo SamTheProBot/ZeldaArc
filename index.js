@@ -2,8 +2,8 @@
 const canvas = document.querySelector(`#canvas1`);
 const ctx = canvas.getContext(`2d`);
 
-const canvasWidth = (canvas.width = 1250);
-const canvasHeight = (canvas.height = 900);
+const canvasWidth = (canvas.width = 1300);
+const canvasHeight = (canvas.height = 850);
 
 const offset = {
   positionX: -500,
@@ -11,7 +11,7 @@ const offset = {
 };
 
 const playerProperty = {
-  playerVelocity: 5,
+  playerVelocity: 4,
   positionX: canvasWidth / 2 - 16,
   positionY: canvasHeight / 2 - 16,
 };
@@ -32,7 +32,7 @@ const keys = {
 const snake = new Enemy(
   `./NinjaAdventure/Actor/Monsters/Beast/Beast.png`,
   // `/NinjaAdventure/Actor/Monsters/Snake3/Snake3.png`,
-  500,
+  10,
   300,
   playerProperty.positionX,
   playerProperty.positionY
@@ -78,14 +78,14 @@ const animation = () => {
 
   collisionBoundary.forEach((item) => item.draw());
 
-  player.draw();
-
   snake.positionX = offset.positionX + 1200 + snake.offsetX;
   snake.positionY = offset.positionY + 1100 + snake.offsetY;
 
-  snake.draw();
   player.drawWeapon();
+  snake.draw();
   snake.movement();
+  player.draw();
+  player.health();
 
   if (keys.PresssedW) {
     let collisionDetected = false;

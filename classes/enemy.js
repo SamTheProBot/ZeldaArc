@@ -8,7 +8,6 @@ class Enemy {
     this.playerY = playerY;
     this.positionX = 0;
     this.positionY = 0;
-
     this.offsetX = 0;
     this.offsetY = 0;
     this.width = this.image.width / 4;
@@ -19,52 +18,68 @@ class Enemy {
     this.frame = 0;
     this.gameframe = 0;
     this.direction = 0;
-    this.velocity = 1.5;
+    this.velocity = 2;
+    this.knockback = 70;
     this.alive = true;
     this.hitCooldown = new Cooldown(500);
   }
 
   movement() {
-    if (
-      distanceBtw(this.playerX, this.playerY, this.positionX, this.positionY) < this.range &&
-      this.alive === true
-    ) {
-      if (this.playerX >= this.positionX) {
-        this.offsetX += this.velocity;
+    let distance = distanceBtw(this.playerX, this.playerY, this.positionX, this.positionY);
+    let angle = Math.atan2(this.playerY - this.positionY, this.playerX - this.positionX);
+
+    if (distance < this.range && this.alive === true) {
+      this.offsetX += Math.cos(angle) * this.velocity;
+      this.offsetY += Math.sin(angle) * this.velocity;
+
+      if (angle >= -Math.PI / 4 && angle < Math.PI / 4) {
         this.direction = 3;
-      }
-      if (this.playerX < this.positionX) {
-        this.offsetX -= this.velocity;
+      } else if (angle >= Math.PI / 4 && angle < (3 * Math.PI) / 4) {
+        this.direction = 0;
+      } else if (angle >= (-3 * Math.PI) / 4 && angle < -Math.PI / 4) {
+        this.direction = 1;
+      } else {
         this.direction = 2;
       }
-      if (this.playerY >= this.positionY) {
-        this.offsetY += this.velocity;
-        this.direction = 0;
+      this.dmgTaken(player.attack(this.positionX, this.positionY), player.direction);
+
+      if (this.gameframe % (this.velocity * 4) === 0) {
+        if (this.frame < 3) this.frame++;
+        else this.frame = 0;
       }
-      if (this.playerY < this.positionY) {
-        this.offsetY -= this.velocity;
-        this.direction = 1;
-      }
-      this.dmgTaken(player.attack(this.positionX, this.positionY));
+      this.gameframe++;
     }
   }
 
-  dmgTaken(reciedDmg) {
+  dmgTaken(reciedDmg, direction) {
     if (reciedDmg !== undefined && this.hitCooldown.isCooldownElapsed()) {
       console.log(this.hp);
       this.hitCooldown.updateActivationTime();
       this.hp -= reciedDmg;
-      if (Math.abs(this.positionX > this.playerX)) this.offsetX += 50;
-      else this.offsetX -= 50;
-      if (Math.abs(this.positionY > this.playerY)) this.offsetY += 50;
-      else this.offsetY -= 50;
+      this.hitEffect();
+      switch (direction) {
+        case 0:
+          this.offsetY += this.knockback;
+          break;
+        case 1:
+          this.offsetY -= this.knockback;
+          break;
+        case 2:
+          this.offsetX -= this.knockback;
+          break;
+        case 3:
+          this.offsetX += this.knockback;
+          break;
+      }
     }
   }
 
   hitEffect() {
+    let frame = 0;
+    let gameframe = 0;
     ctx.drawImage(
       this.hitEffectAni,
-      this.frame * 32,
+      frame * 32,
       0,
       this.width * 2,
       this.height * 2,
@@ -73,6 +88,11 @@ class Enemy {
       this.width * 4,
       this.height * 4
     );
+    if (gameframe % (this.velocity * 4) === 0) {
+      if (frame < 3) frame++;
+      else frame = 0;
+    }
+    gameframe++;
   }
 
   draw() {
@@ -88,11 +108,6 @@ class Enemy {
         this.width * 4,
         this.height * 4
       );
-      if (this.gameframe % 6 === 0) {
-        if (this.frame < 3) this.frame++;
-        else this.frame = 0;
-      }
-      this.gameframe++;
     } else {
       this.alive = false;
     }
