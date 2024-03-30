@@ -2,8 +2,8 @@
 const canvas = document.querySelector(`#canvas1`);
 const ctx = canvas.getContext(`2d`);
 
-const canvasWidth = (canvas.width = 1850);
-const canvasHeight = (canvas.height = 1300);
+const canvasWidth = (canvas.width = 1250);
+const canvasHeight = (canvas.height = 900);
 
 const offset = {
   positionX: -500,
@@ -30,9 +30,10 @@ const keys = {
 };
 
 const snake = new Enemy(
-  `/NinjaAdventure/Actor/Monsters/Snake3/Snake3.png`,
-  4,
-  250,
+  `./NinjaAdventure/Actor/Monsters/Beast/Beast.png`,
+  // `/NinjaAdventure/Actor/Monsters/Snake3/Snake3.png`,
+  500,
+  300,
   playerProperty.positionX,
   playerProperty.positionY
 );
@@ -78,32 +79,13 @@ const animation = () => {
   collisionBoundary.forEach((item) => item.draw());
 
   player.draw();
-  player.movement();
-  player.drawWeapon();
 
-  snake.positionX = offset.positionX + 1800 + snake.offsetX;
-  snake.positionY = offset.positionY + 550 + snake.offsetY;
+  snake.positionX = offset.positionX + 1200 + snake.offsetX;
+  snake.positionY = offset.positionY + 1100 + snake.offsetY;
+
   snake.draw();
-
-  if (snake.updatePosition()) {
-    snake.movement();
-    if (playerProperty.positionX > snake.positionX) {
-      snake.offsetX += snake.velocity;
-      snake.direction = 3;
-    }
-    if (playerProperty.positionX < snake.positionX) {
-      snake.offsetX -= snake.velocity;
-      snake.direction = 2;
-    }
-    if (playerProperty.positionY > snake.positionY) {
-      snake.offsetY += snake.velocity;
-      snake.direction = 0;
-    }
-    if (playerProperty.positionY < snake.positionY) {
-      snake.offsetY -= snake.velocity;
-      snake.direction = 1;
-    }
-  }
+  player.drawWeapon();
+  snake.movement();
 
   if (keys.PresssedW) {
     let collisionDetected = false;
@@ -177,9 +159,6 @@ const animation = () => {
       offset.positionX -= playerProperty.playerVelocity;
     }
   }
-  if (keys.PresssedSpace) {
-    console.log(`space`);
-  }
   requestAnimationFrame(animation);
 };
 animation();
@@ -234,6 +213,7 @@ window.addEventListener(`keyup`, function (e) {
     case ` `:
       keys.PresssedSpace = false;
       player.attackAnimation = false;
+      player.frame = 0;
       break;
   }
 });

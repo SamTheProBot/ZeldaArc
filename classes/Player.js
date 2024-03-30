@@ -14,22 +14,17 @@ class PlayerSpirit {
     this.width = this.image.width / 4;
     this.height = this.image.height / 6.5;
     this.hp = 10;
-    this.prevHp = this.hp - 1;
     this.attackDmg = 1;
     this.frame = 0;
     this.gameframe = 0;
     this.moving = false;
     this.direction = null;
     this.attackAnimation = false;
+    this.attackRange = 50;
+    this.attackCoolDown = 500;
+    this.lastAttackTime = 0;
+    this.lastAttackTime = 0;
     this.playerVelocity = playerVelocity;
-  }
-
-  movement() {
-    if (this.moving && this.gameframe % Math.floor(this.playerVelocity * 1.4) === 0) {
-      if (this.frame < 3) this.frame++;
-      else this.frame = 0;
-    }
-    this.gameframe++;
   }
 
   drawWeapon() {
@@ -104,5 +99,24 @@ class PlayerSpirit {
       this.width * 4,
       this.height * 4
     );
+    if (this.moving && this.gameframe % Math.floor(this.playerVelocity * 1.4) === 0) {
+      if (this.frame < 3) this.frame++;
+      else this.frame = 0;
+    }
+    this.gameframe++;
+  }
+
+  attack(enemyX, enemyY) {
+    if (
+      this.attackAnimation === true &&
+      distanceBtw(
+        this.positionX + this.weaponPosition.x,
+        this.positionY + +this.weaponPosition.y,
+        enemyX,
+        enemyY
+      ) < this.attackRange
+    ) {
+      return this.attackDmg;
+    }
   }
 }
