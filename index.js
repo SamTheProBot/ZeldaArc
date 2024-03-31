@@ -39,8 +39,8 @@ const snake = new Enemy(
 );
 
 const player = new PlayerSpirit(
-  `./NinjaAdventure/Actor/Characters/BlueNinja/SpriteSheet.png`,
-  `./NinjaAdventure/Items/Weapons/Lance2/Sprite.png`,
+  `/NinjaAdventure/Actor/Characters/Princess/SpriteSheet.png`,
+  `./NinjaAdventure/Items/Weapons/Sword2/Sprite.png`,
   playerProperty,
   offset
 );
@@ -201,18 +201,25 @@ window.addEventListener(`keyup`, function (e) {
     case `w`:
       keys.PresssedW = false;
       player.moving = false;
+      player.frame = 0;
+
       break;
     case `a`:
       keys.PresssedA = false;
       player.moving = false;
+      player.frame = 0;
+
       break;
     case `s`:
       keys.PresssedS = false;
       player.moving = false;
+      player.frame = 0;
+
       break;
     case `d`:
       keys.PresssedD = false;
       player.moving = false;
+      player.frame = 0;
       break;
     case ` `:
       keys.PresssedSpace = false;
