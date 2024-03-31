@@ -1,13 +1,13 @@
 class PlayerSpirit {
-  constructor(imagesrc, weaponsrc, positionX, positionY, playerVelocity) {
+  constructor(imagesrc, weaponsrc, playerProperty) {
     this.image = new Image();
     this.image.src = imagesrc;
     this.weapon = new Image();
     this.weapon.src = weaponsrc;
     this.hearts = new Image();
     this.hearts.src = `./NinjaAdventure/HUD/Heart.png`;
-    this.positionY = positionY;
-    this.positionX = positionX;
+    this.positionY = playerProperty.positionY;
+    this.positionX = playerProperty.positionX;
     this.weaponPosition = {
       angle: 0,
       x: 32,
@@ -15,7 +15,7 @@ class PlayerSpirit {
     };
     this.width = this.image.width / 4;
     this.height = this.image.height / 6.5;
-    this.hp = 3;
+    this.hp = 4;
     this.attackDmg = 1;
     this.frame = 0;
     this.gameframe = 0;
@@ -26,7 +26,10 @@ class PlayerSpirit {
     this.attackCoolDown = 500;
     this.lastAttackTime = 0;
     this.lastAttackTime = 0;
-    this.playerVelocity = playerVelocity;
+    this.alive = true;
+    this.velocity = playerProperty.velocity;
+    this.hitCooldown = new Cooldown(500);
+    this.knockback = 70;
   }
 
   health() {
@@ -36,22 +39,14 @@ class PlayerSpirit {
       0,
       this.width,
       this.height,
-      this.positionX - 480,
-      this.positionY - 350,
-      this.width * 4,
-      this.height * 4
-    );
-    ctx.drawImage(
-      this.hearts,
-      (this.hp - 5) * 16,
-      0,
-      this.width,
-      this.height,
       this.positionX - 550,
       this.positionY - 350,
       this.width * 4,
       this.height * 4
     );
+    if (this.hp <= 0) {
+      this.alive = false;
+    }
   }
 
   drawWeapon() {
@@ -126,11 +121,20 @@ class PlayerSpirit {
       this.width * 4,
       this.height * 4
     );
-    if (this.moving && this.gameframe % Math.floor(this.playerVelocity * 1.5) === 0) {
+    if (this.moving && this.gameframe % Math.floor(this.velocity * 1.5) === 0) {
       if (this.frame < 3) this.frame++;
       else this.frame = 0;
     }
     this.gameframe++;
+  }
+
+  dmgTaken(reciedDmg, angle, offset) {
+    if (reciedDmg !== undefined && this.hitCooldown.isCooldownElapsed()) {
+      this.hitCooldown.updateActivationTime();
+      this.hp -= reciedDmg;
+      offset.positionX -= Math.cos(angle) * this.knockback;
+      offset.positionY -= Math.sin(angle) * this.knockback;
+    }
   }
 
   attack(enemyX, enemyY) {

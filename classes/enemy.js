@@ -22,21 +22,22 @@ class Enemy {
     this.knockback = 70;
     this.alive = true;
     this.hitCooldown = new Cooldown(500);
+    this.angleofApproch = null;
   }
 
   movement() {
     let distance = distanceBtw(this.playerX, this.playerY, this.positionX, this.positionY);
-    let angle = Math.atan2(this.playerY - this.positionY, this.playerX - this.positionX);
+    this.angleofApproch = Math.atan2(this.playerY - this.positionY, this.playerX - this.positionX);
 
     if (distance < this.range && this.alive === true) {
-      this.offsetX += Math.cos(angle) * this.velocity;
-      this.offsetY += Math.sin(angle) * this.velocity;
+      this.offsetX += Math.cos(this.angleofApproch) * this.velocity;
+      this.offsetY += Math.sin(this.angleofApproch) * this.velocity;
 
-      if (angle >= -Math.PI / 4 && angle < Math.PI / 4) {
+      if (this.angleofApproch >= -Math.PI / 4 && this.angleofApproch < Math.PI / 4) {
         this.direction = 3;
-      } else if (angle >= Math.PI / 4 && angle < (3 * Math.PI) / 4) {
+      } else if (this.angleofApproch >= Math.PI / 4 && this.angleofApproch < (3 * Math.PI) / 4) {
         this.direction = 0;
-      } else if (angle >= (-3 * Math.PI) / 4 && angle < -Math.PI / 4) {
+      } else if (this.angleofApproch >= (-3 * Math.PI) / 4 && this.angleofApproch < -Math.PI / 4) {
         this.direction = 1;
       } else {
         this.direction = 2;
@@ -53,7 +54,6 @@ class Enemy {
 
   dmgTaken(reciedDmg, direction) {
     if (reciedDmg !== undefined && this.hitCooldown.isCooldownElapsed()) {
-      console.log(this.hp);
       this.hitCooldown.updateActivationTime();
       this.hp -= reciedDmg;
       this.hitEffect();
@@ -71,6 +71,12 @@ class Enemy {
           this.offsetX += this.knockback;
           break;
       }
+    }
+  }
+
+  attack() {
+    if (distanceBtw(this.positionX, this.positionY, this.playerX, this.playerY) < 50) {
+      return this.attackDmg;
     }
   }
 
