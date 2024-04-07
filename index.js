@@ -1,13 +1,14 @@
 /** @type {HTMLCanvasElement} */
 const canvas = document.querySelector(`#canvas1`);
+
 const ctx = canvas.getContext(`2d`);
 
-const canvasWidth = (canvas.width = 1000);
-const canvasHeight = (canvas.height = 650);
+const canvasWidth = (canvas.width = 800);
+const canvasHeight = (canvas.height = 500);
 
 const offset = {
-  positionX: -150,
-  positionY: -120,
+  positionX: -320,
+  positionY: -180,
 };
 
 const playerProperty = {

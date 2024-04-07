@@ -39,8 +39,8 @@ class PlayerSpirit {
       0,
       this.width,
       this.height,
-      this.positionX - 400,
-      this.positionY - 300,
+      this.positionX - 325,
+      this.positionY - 210,
       this.width * 4,
       this.height * 4
     );

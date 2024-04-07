@@ -1,13 +1,18 @@
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   background-color: black;
 }
 #canvas1 {
   border: 2px gray solid;
   background-color: black;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 1250;
-  height: 900;
+  height: 500px;
+  width: 800px;
+}
+#keyboard {
+  background-color: black;
+  height: 20px;
+  width: 200px;
 }
