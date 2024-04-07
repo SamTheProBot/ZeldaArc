@@ -2,23 +2,22 @@ class Game {
   constructor(canvasWidth, canvasHeight) {
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
-    this.offset;
+    this.backgroundType = `HomeVillage`;
     this.background = null;
-    this.toplayerBackground = null;
-    this.npc = [];
-    this.enemy = [];
+    this.enemyArray = [];
+    this.collisionBoundary = [];
   }
-  // init(backgroundType, topLayer, NpcLayer, enemyLayer) {
-  init(backgroundType) {
-    switch (backgroundType) {
-      case `overworld`:
-        this.background = new Image();
-        this.background.src = `./Images/HomeVIllage/HomeVillage.png`;
 
-        break;
-      case `home`:
+  init() {
+    switch (this.backgroundType) {
+      case `HomeVillage`:
         this.background = new Image();
-        this.background.src = `./Images/HomeVIllage/HomeRoom.png`;
+        this.background.src = `./Images/Homevillage/HomeVillage.png`;
+        break;
+
+      case `MainHouse`:
+        this.background = new Image();
+        this.background.src = `./Images/Homevillage/MainHouse.png`;
         break;
     }
   }

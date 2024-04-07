@@ -1,13 +1,13 @@
 class Enemy {
-  constructor(imagesrc, hp, range, playerX, playerY) {
+  constructor(imagesrc, hp, range, positionX, positionY) {
     this.image = new Image();
     this.image.src = imagesrc;
     this.hitEffectAni = new Image();
     this.hitEffectAni.src = `./NinjaAdventure/FX/SlashFx/CircularSlash/SpriteSheet.png`;
-    this.playerX = playerX;
-    this.playerY = playerY;
-    this.positionX = 0;
-    this.positionY = 0;
+    this.playerX = canvasWidth / 2 - 16;
+    this.playerY = canvasHeight / 2 - 16;
+    this.positionX = positionX.positionX;
+    this.positionY = positionY.positionY;
     this.offsetX = 0;
     this.offsetY = 0;
     this.width = this.image.width / 4;
@@ -55,8 +55,8 @@ class Enemy {
   dmgTaken(reciedDmg, direction) {
     if (reciedDmg !== undefined && this.hitCooldown.isCooldownElapsed()) {
       this.hitCooldown.updateActivationTime();
-      this.hp -= reciedDmg;
       this.hitEffect();
+      this.hp -= reciedDmg;
       switch (direction) {
         case 0:
           this.offsetY += this.knockback;
@@ -83,23 +83,63 @@ class Enemy {
   hitEffect() {
     let frame = 0;
     let gameframe = 0;
-    ctx.drawImage(
-      this.hitEffectAni,
-      frame * 32,
-      0,
-      this.width * 2,
-      this.height * 2,
-      this.positionX,
-      this.positionY,
-      this.width * 4,
-      this.height * 4
-    );
-    if (gameframe % (this.velocity * 4) === 0) {
-      if (frame < 3) frame++;
-      else frame = 0;
-    }
-    gameframe++;
+
+    const animationLoop = () => {
+      ctx.clearRect(this.positionX, this.positionY, this.width * 4, this.height * 4);
+      ctx.drawImage(
+        this.hitEffectAni,
+        frame * 32,
+        0,
+        this.width * 2,
+        this.height * 2,
+        this.positionX,
+        this.positionY,
+        this.width * 4,
+        this.height * 4
+      );
+
+      if (gameframe % (this.velocity * 12) === 0) {
+        if (frame < 3) frame++;
+        else {
+          cancelAnimationFrame(animationId);
+          // Clear the drawn hit effect
+          ctx.clearRect(this.positionX, this.positionY, this.width * 4, this.height * 4);
+        }
+      }
+      gameframe++;
+      animationId = requestAnimationFrame(animationLoop);
+    };
+
+    // Start the animation loop
+    let animationId = requestAnimationFrame(animationLoop);
   }
+
+  // hitEffect() {
+  //   // let animationId;
+  //   // const animationLoop = () => {
+  //   let frame = 0;
+  //   let gameframe = 0;
+  //   ctx.drawImage(
+  //     this.hitEffectAni,
+  //     frame * 32,
+  //     0,
+  //     this.width * 2,
+  //     this.height * 2,
+  //     this.positionX,
+  //     this.positionY,
+  //     this.width * 4,
+  //     this.height * 4
+  //   );
+  //   if (gameframe % (this.velocity * 12) === 0) {
+  //     if (frame < 3) frame++;
+  //     // else cancelAnimationFrame(animationId);
+  //     else frame++;
+  //   }
+  //   gameframe++;
+  //   // animationId = requestAnimationFrame(animationLoop);
+  //   // };
+  //   // animationId = requestAnimationFrame(animationLoop);
+  // }
 
   draw() {
     if (this.hp > 0) {

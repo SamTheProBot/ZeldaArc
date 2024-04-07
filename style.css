@@ -2,7 +2,8 @@ body {
   background-color: black;
 }
 #canvas1 {
-  background-color: aliceblue;
+  border: 2px gray solid;
+  background-color: black;
   position: absolute;
   left: 50%;
   top: 50%;

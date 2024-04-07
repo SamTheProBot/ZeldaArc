@@ -39,8 +39,8 @@ class PlayerSpirit {
       0,
       this.width,
       this.height,
-      this.positionX - 550,
-      this.positionY - 350,
+      this.positionX - 400,
+      this.positionY - 300,
       this.width * 4,
       this.height * 4
     );
@@ -140,12 +140,8 @@ class PlayerSpirit {
   attack(enemyX, enemyY) {
     if (
       this.attackAnimation === true &&
-      distanceBtw(
-        this.positionX + this.weaponPosition.x,
-        this.positionY + +this.weaponPosition.y,
-        enemyX,
-        enemyY
-      ) < this.attackRange
+      distanceBtw(this.positionX + this.weaponPosition.x, this.positionY + +this.weaponPosition.y, enemyX, enemyY) <
+        this.attackRange
     ) {
       return this.attackDmg;
     }
