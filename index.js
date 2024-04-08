@@ -3,16 +3,21 @@ const canvas = document.querySelector(`#canvas1`);
 
 const ctx = canvas.getContext(`2d`);
 
-const canvasWidth = (canvas.width = 800);
-const canvasHeight = (canvas.height = 500);
+const canvasWidth = (canvas.width = 1200);
+const canvasHeight = (canvas.height = 750);
+
+// const offset = {
+//   positionX: -320,
+//   positionY: -180,
+// };
 
 const offset = {
-  positionX: -320,
-  positionY: -180,
+  positionX: -120,
+  positionY: -50,
 };
 
 const playerProperty = {
-  velocity: 4,
+  velocity: 8,
 };
 
 const map = {
@@ -67,12 +72,20 @@ const animation = () => {
           break;
         case 4:
           Array.enemyLocationArray.push(
-            new Enemy(`./NinjaAdventure/Actor/Monsters/Beast/Beast.png`, 10, 300, offset.positionX, offset.positionY)
+            new Enemy(
+              `./NinjaAdventure/Actor/Monsters/Beast/Beast.png`,
+              10,
+              300,
+              j * CollisionBlock.pixel + offset.positionX,
+              i * CollisionBlock.pixel + offset.positionY
+            )
           );
           break;
       }
     });
   });
+
+  console.log(Array.enemyLocationArray);
 
   WorldMap.init(map.type);
   WorldMap.draw(offset);
@@ -80,16 +93,16 @@ const animation = () => {
   Array.collisionBoundaryArray.forEach((item) => item.draw());
 
   Array.enemyLocationArray.forEach((eny) => {
-    eny.positionX = offset.positionX + 1100 + eny.offsetX;
-    eny.positionY = offset.positionY + 450 + eny.offsetY;
+    eny.positionX = offset.positionX + eny.offsetX;
+    eny.positionY = offset.positionY + eny.offsetY;
+    eny.draw();
+    player.dmgTaken(eny.attack(), eny.angleofApproch, offset);
+    eny.movement();
   });
 
   player.drawWeapon();
-  eny.draw();
   player.draw();
-  player.dmgTaken(eny.attack(), eny.angleofApproch, offset);
   player.health();
-  eny.movement();
 
   if (!player.alive) {
     window.location.reload();

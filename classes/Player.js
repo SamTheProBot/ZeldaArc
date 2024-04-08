@@ -1,13 +1,13 @@
 class PlayerSpirit {
-  constructor(imagesrc, weaponsrc, playerProperty) {
+  constructor(imagesrc, weaponsrc) {
     this.image = new Image();
     this.image.src = imagesrc;
     this.weapon = new Image();
     this.weapon.src = weaponsrc;
     this.hearts = new Image();
     this.hearts.src = `./NinjaAdventure/HUD/Heart.png`;
-    this.positionY = playerProperty.positionY;
-    this.positionX = playerProperty.positionX;
+    this.positionY = canvasHeight / 2 - 16;
+    this.positionX = canvasWidth / 2 - 16;
     this.weaponPosition = {
       angle: 0,
       x: 32,
@@ -27,7 +27,6 @@ class PlayerSpirit {
     this.lastAttackTime = 0;
     this.lastAttackTime = 0;
     this.alive = true;
-    this.velocity = playerProperty.velocity;
     this.hitCooldown = new Cooldown(500);
     this.knockback = 70;
   }
@@ -121,7 +120,7 @@ class PlayerSpirit {
       this.width * 4,
       this.height * 4
     );
-    if (this.moving && this.gameframe % Math.floor(this.velocity * 1.5) === 0) {
+    if (this.moving && this.gameframe % Math.floor(6) === 0) {
       if (this.frame < 3) this.frame++;
       else this.frame = 0;
     }

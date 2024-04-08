@@ -1,13 +1,13 @@
 class Enemy {
-  constructor(imagesrc, hp, range, positionX, positionY) {
+  constructor(imagesrc, hp, range, offsetX, offsetY) {
     this.image = new Image();
     this.image.src = imagesrc;
     this.hitEffectAni = new Image();
     this.hitEffectAni.src = `./NinjaAdventure/FX/SlashFx/CircularSlash/SpriteSheet.png`;
     this.playerX = canvasWidth / 2 - 16;
     this.playerY = canvasHeight / 2 - 16;
-    this.positionX = positionX.positionX;
-    this.positionY = positionY.positionY;
+    this.positionX = offsetX;
+    this.positionY = offsetY;
     this.offsetX = 0;
     this.offsetY = 0;
     this.width = this.image.width / 4;
@@ -55,7 +55,7 @@ class Enemy {
   dmgTaken(reciedDmg, direction) {
     if (reciedDmg !== undefined && this.hitCooldown.isCooldownElapsed()) {
       this.hitCooldown.updateActivationTime();
-      this.hitEffect();
+      // this.hitEffect();
       this.hp -= reciedDmg;
       switch (direction) {
         case 0:
@@ -80,65 +80,36 @@ class Enemy {
     }
   }
 
-  hitEffect() {
-    let frame = 0;
-    let gameframe = 0;
-
-    const animationLoop = () => {
-      ctx.clearRect(this.positionX, this.positionY, this.width * 4, this.height * 4);
-      ctx.drawImage(
-        this.hitEffectAni,
-        frame * 32,
-        0,
-        this.width * 2,
-        this.height * 2,
-        this.positionX,
-        this.positionY,
-        this.width * 4,
-        this.height * 4
-      );
-
-      if (gameframe % (this.velocity * 12) === 0) {
-        if (frame < 3) frame++;
-        else {
-          cancelAnimationFrame(animationId);
-          // Clear the drawn hit effect
-          ctx.clearRect(this.positionX, this.positionY, this.width * 4, this.height * 4);
-        }
-      }
-      gameframe++;
-      animationId = requestAnimationFrame(animationLoop);
-    };
-
-    // Start the animation loop
-    let animationId = requestAnimationFrame(animationLoop);
-  }
-
   // hitEffect() {
-  //   // let animationId;
-  //   // const animationLoop = () => {
   //   let frame = 0;
   //   let gameframe = 0;
-  //   ctx.drawImage(
-  //     this.hitEffectAni,
-  //     frame * 32,
-  //     0,
-  //     this.width * 2,
-  //     this.height * 2,
-  //     this.positionX,
-  //     this.positionY,
-  //     this.width * 4,
-  //     this.height * 4
-  //   );
-  //   if (gameframe % (this.velocity * 12) === 0) {
-  //     if (frame < 3) frame++;
-  //     // else cancelAnimationFrame(animationId);
-  //     else frame++;
-  //   }
-  //   gameframe++;
-  //   // animationId = requestAnimationFrame(animationLoop);
-  //   // };
-  //   // animationId = requestAnimationFrame(animationLoop);
+
+  //   const animationLoop = () => {
+  //     ctx.clearRect(this.positionX, this.positionY, this.width * 4, this.height * 4);
+  //     ctx.drawImage(
+  //       this.hitEffectAni,
+  //       frame * 32,
+  //       0,
+  //       this.width * 2,
+  //       this.height * 2,
+  //       this.positionX,
+  //       this.positionY,
+  //       this.width * 4,
+  //       this.height * 4
+  //     );
+
+  //     if (gameframe % (this.velocity * 12) === 0) {
+  //       if (frame < 3) frame++;
+  //       else {
+  //         cancelAnimationFrame(animationId);
+  //         ctx.clearRect(this.positionX, this.positionY, this.width * 4, this.height * 4);
+  //       }
+  //     }
+  //     gameframe++;
+  //     animationId = requestAnimationFrame(animationLoop);
+  //   };
+
+  //   let animationId = requestAnimationFrame(animationLoop);
   // }
 
   draw() {
@@ -149,8 +120,8 @@ class Enemy {
         this.frame * 16,
         this.width,
         this.height,
-        this.positionX,
-        this.positionY,
+        this.positionX + this.offsetX,
+        this.positionY + this.offsetY,
         this.width * 4,
         this.height * 4
       );
