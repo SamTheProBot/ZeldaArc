@@ -13,13 +13,11 @@ const offset = {
 
 const playerProperty = {
   velocity: 4,
-  positionX: canvasWidth / 2 - 16,
-  positionY: canvasHeight / 2 - 16,
 };
 
 const map = {
   type: `HomeVillage`,
-  collisionBoundary: null,
+  collisionBoundary: HomeVillageCollisionarray,
 };
 
 const keys = {
@@ -30,15 +28,20 @@ const keys = {
   PresssedSpace: false,
 };
 
-const snake = new Enemy(`./NinjaAdventure/Actor/Monsters/Beast/Beast.png`, 10, 300, offset.positionX, offset.positionY);
 const player = new PlayerSpirit(
   `/NinjaAdventure/Actor/Characters/Princess/SpriteSheet.png`,
-  `./NinjaAdventure/Items/Weapons/Sword2/Sprite.png`,
-  playerProperty,
-  offset
+  `./NinjaAdventure/Items/Weapons/Sword2/Sprite.png`
 );
+// const snake =
+
 const animation = () => {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  const Array = {
+    collisionBoundaryArray: [],
+    enemyLocationArray: [],
+  };
+
   const WorldMap = new Game(canvasWidth, canvasHeight);
 
   switch (WorldMap.backgroundType) {
@@ -50,13 +53,11 @@ const animation = () => {
       break;
   }
 
-  WorldMap.collisionBoundary = [];
-  WorldMap.enemyArray = [];
   map.collisionBoundary.forEach((axisY, i) => {
     axisY.forEach((axisX, j) => {
       switch (axisX) {
         case 1:
-          WorldMap.collisionBoundary.push(
+          Array.collisionBoundaryArray.push(
             new CollisionBlock(j * CollisionBlock.pixel + offset.positionX, i * CollisionBlock.pixel + offset.positionY)
           );
           break;
@@ -65,7 +66,9 @@ const animation = () => {
         case 3:
           break;
         case 4:
-          WorldMap.enemyArray.push();
+          Array.enemyLocationArray.push(
+            new Enemy(`./NinjaAdventure/Actor/Monsters/Beast/Beast.png`, 10, 300, offset.positionX, offset.positionY)
+          );
           break;
       }
     });
@@ -74,17 +77,19 @@ const animation = () => {
   WorldMap.init(map.type);
   WorldMap.draw(offset);
 
-  WorldMap.collisionBoundary.forEach((item) => item.draw());
+  Array.collisionBoundaryArray.forEach((item) => item.draw());
 
-  snake.positionX = offset.positionX + 1100 + snake.offsetX;
-  snake.positionY = offset.positionY + 450 + snake.offsetY;
+  Array.enemyLocationArray.forEach((eny) => {
+    eny.positionX = offset.positionX + 1100 + eny.offsetX;
+    eny.positionY = offset.positionY + 450 + eny.offsetY;
+  });
 
   player.drawWeapon();
-  snake.draw();
+  eny.draw();
   player.draw();
-  player.dmgTaken(snake.attack(), snake.angleofApproch, offset);
+  player.dmgTaken(eny.attack(), eny.angleofApproch, offset);
   player.health();
-  snake.movement();
+  eny.movement();
 
   if (!player.alive) {
     window.location.reload();
@@ -92,8 +97,8 @@ const animation = () => {
 
   if (keys.PresssedW) {
     let collisionDetected = false;
-    for (let i = 0; i < WorldMap.collisionBoundary.length; i++) {
-      const boundry = WorldMap.collisionBoundary[i];
+    for (let i = 0; i < Array.collisionBoundaryArray.length; i++) {
+      const boundry = Array.collisionBoundaryArray[i];
       if (
         CollisionDetection(player, {
           positionX: boundry.positionX,
@@ -110,8 +115,8 @@ const animation = () => {
   }
   if (keys.PresssedA) {
     let collisionDetected = false;
-    for (let i = 0; i < WorldMap.collisionBoundary.length; i++) {
-      const boundry = WorldMap.collisionBoundary[i];
+    for (let i = 0; i < Array.collisionBoundaryArray.length; i++) {
+      const boundry = Array.collisionBoundaryArray[i];
       if (
         CollisionDetection(player, {
           positionX: boundry.positionX + playerProperty.velocity,
@@ -128,8 +133,8 @@ const animation = () => {
   }
   if (keys.PresssedS) {
     let collisionDetected = false;
-    for (let i = 0; i < WorldMap.collisionBoundary.length; i++) {
-      const boundry = WorldMap.collisionBoundary[i];
+    for (let i = 0; i < Array.collisionBoundaryArray.length; i++) {
+      const boundry = Array.collisionBoundaryArray[i];
       if (
         CollisionDetection(player, {
           positionX: boundry.positionX,
@@ -146,8 +151,8 @@ const animation = () => {
   }
   if (keys.PresssedD) {
     let collisionDetected = false;
-    for (let i = 0; i < WorldMap.collisionBoundary.length; i++) {
-      const boundry = WorldMap.collisionBoundary[i];
+    for (let i = 0; i < Array.collisionBoundaryArray.length; i++) {
+      const boundry = Array.collisionBoundaryArray[i];
       if (
         CollisionDetection(player, {
           positionX: boundry.positionX - playerProperty.velocity,
