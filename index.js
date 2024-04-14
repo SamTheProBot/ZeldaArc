@@ -3,12 +3,17 @@ const canvas = document.querySelector(`#canvas1`);
 
 const ctx = canvas.getContext(`2d`);
 
-const canvasWidth = (canvas.width = 900);
-const canvasHeight = (canvas.height = 600);
+const canvasWidth = (canvas.width = 1200);
+const canvasHeight = (canvas.height = 750);
+
+// const offset = {
+//   positionX: -320,
+//   positionY: -180,
+// };
 
 const offset = {
-  positionX: -320,
-  positionY: -180,
+  positionX: 0,
+  positionY: 0,
 };
 
 const playerProperty = {
@@ -18,6 +23,8 @@ const playerProperty = {
 const map = {
   type: `HomeVillage`,
   collisionBoundary: HomeVillageCollisionarray,
+  enemyLocation: HomeVillageEnemyArray,
+  enemyLocationArray: [],
 };
 
 const keys = {
@@ -32,20 +39,39 @@ const player = new PlayerSpirit(
   `/NinjaAdventure/Actor/Characters/Princess/SpriteSheet.png`,
   `./NinjaAdventure/Items/Weapons/Sword2/Sprite.png`
 );
-const snake = new Enemy(
-  `./NinjaAdventure/Actor/Monsters/Beast/Beast.png`,
-  10,
-  300,
-  offset.positionX,
-  offset.positionY
-);
-map.
+
+map.enemyLocation.forEach((axisY, i) => {
+  axisY.forEach((axisX, j) => {
+    // if (axisX === 1) {
+    //   map.enemyLocationArray.push(
+    //     new Enemy(
+    //       `./NinjaAdventure/Actor/Monsters/Beast/Beast.png`,
+    //       10,
+    //       300,
+    //       offset.positionX + j * CollisionBlock.pixel,
+    //       offset.positionY + i * CollisionBlock.pixel
+    //     )
+    //   );
+    // } else if (axisX === 2) {
+    if (axisX === 2) {
+      map.enemyLocationArray.push(
+        new Enemy(
+          `./NinjaAdventure/Actor/Monsters/Bamboo/SpriteSheet.png`,
+          10,
+          300,
+          offset.positionX + j * CollisionBlock.pixel,
+          offset.positionY + i * CollisionBlock.pixel
+        )
+      );
+    }
+  });
+});
+
 const animation = () => {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
   const Array = {
     collisionBoundaryArray: [],
-    enemyLocationArray: [],
   };
 
   const WorldMap = new Game(canvasWidth, canvasHeight);
@@ -53,9 +79,11 @@ const animation = () => {
   switch (WorldMap.backgroundType) {
     case `HomeVillage`:
       map.collisionBoundary = HomeVillageCollisionarray;
+      map.enemyLocation = HomeVillageEnemyArray;
       break;
     case `MainHouse`:
       map.collisionBoundary = MainHousearray;
+      map.enemyLocation = MainHouseEnemyarray;
       break;
   }
 
@@ -83,11 +111,13 @@ const animation = () => {
 
   Array.collisionBoundaryArray.forEach((item) => item.draw());
 
-  snake.positionX = offset.positionX + snake.offsetX;
-  snake.positionY = offset.positionY + snake.offsetY;
-  snake.draw();
-  player.dmgTaken(snake.attack(), snake.angleofApproch, offset);
-  snake.movement();
+  map.enemyLocationArray.map((enemy) => {
+    enemy.positionX = offset.positionX + enemy.offsetX;
+    enemy.positionY = offset.positionY + enemy.offsetY;
+    enemy.draw();
+    player.dmgTaken(enemy.attack(), enemy.angleofApproch, offset);
+    enemy.movement();
+  });
 
   player.drawWeapon();
   player.draw();
