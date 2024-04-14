@@ -3,17 +3,12 @@ const canvas = document.querySelector(`#canvas1`);
 
 const ctx = canvas.getContext(`2d`);
 
-const canvasWidth = (canvas.width = 1200);
-const canvasHeight = (canvas.height = 750);
-
-// const offset = {
-//   positionX: -320,
-//   positionY: -180,
-// };
+const canvasWidth = (canvas.width = 900);
+const canvasHeight = (canvas.height = 600);
 
 const offset = {
-  positionX: -120,
-  positionY: -50,
+  positionX: -320,
+  positionY: -180,
 };
 
 const playerProperty = {
@@ -37,8 +32,14 @@ const player = new PlayerSpirit(
   `/NinjaAdventure/Actor/Characters/Princess/SpriteSheet.png`,
   `./NinjaAdventure/Items/Weapons/Sword2/Sprite.png`
 );
-// const snake =
-
+const snake = new Enemy(
+  `./NinjaAdventure/Actor/Monsters/Beast/Beast.png`,
+  10,
+  300,
+  offset.positionX,
+  offset.positionY
+);
+map.
 const animation = () => {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -63,42 +64,30 @@ const animation = () => {
       switch (axisX) {
         case 1:
           Array.collisionBoundaryArray.push(
-            new CollisionBlock(j * CollisionBlock.pixel + offset.positionX, i * CollisionBlock.pixel + offset.positionY)
+            new CollisionBlock(
+              j * CollisionBlock.pixel + offset.positionX,
+              i * CollisionBlock.pixel + offset.positionY
+            )
           );
           break;
         case 2:
           break;
         case 3:
           break;
-        case 4:
-          Array.enemyLocationArray.push(
-            new Enemy(
-              `./NinjaAdventure/Actor/Monsters/Beast/Beast.png`,
-              10,
-              300,
-              j * CollisionBlock.pixel + offset.positionX,
-              i * CollisionBlock.pixel + offset.positionY
-            )
-          );
-          break;
       }
     });
   });
-
-  console.log(Array.enemyLocationArray);
 
   WorldMap.init(map.type);
   WorldMap.draw(offset);
 
   Array.collisionBoundaryArray.forEach((item) => item.draw());
 
-  Array.enemyLocationArray.forEach((eny) => {
-    eny.positionX = offset.positionX + eny.offsetX;
-    eny.positionY = offset.positionY + eny.offsetY;
-    eny.draw();
-    player.dmgTaken(eny.attack(), eny.angleofApproch, offset);
-    eny.movement();
-  });
+  snake.positionX = offset.positionX + snake.offsetX;
+  snake.positionY = offset.positionY + snake.offsetY;
+  snake.draw();
+  player.dmgTaken(snake.attack(), snake.angleofApproch, offset);
+  snake.movement();
 
   player.drawWeapon();
   player.draw();

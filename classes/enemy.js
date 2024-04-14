@@ -26,23 +26,43 @@ class Enemy {
   }
 
   movement() {
-    let distance = distanceBtw(this.playerX, this.playerY, this.positionX, this.positionY);
-    this.angleofApproch = Math.atan2(this.playerY - this.positionY, this.playerX - this.positionX);
+    let distance = distanceBtw(
+      this.playerX,
+      this.playerY,
+      this.positionX,
+      this.positionY
+    );
+    this.angleofApproch = Math.atan2(
+      this.playerY - this.positionY,
+      this.playerX - this.positionX
+    );
 
     if (distance < this.range && this.alive === true) {
       this.offsetX += Math.cos(this.angleofApproch) * this.velocity;
       this.offsetY += Math.sin(this.angleofApproch) * this.velocity;
 
-      if (this.angleofApproch >= -Math.PI / 4 && this.angleofApproch < Math.PI / 4) {
+      if (
+        this.angleofApproch >= -Math.PI / 4 &&
+        this.angleofApproch < Math.PI / 4
+      ) {
         this.direction = 3;
-      } else if (this.angleofApproch >= Math.PI / 4 && this.angleofApproch < (3 * Math.PI) / 4) {
+      } else if (
+        this.angleofApproch >= Math.PI / 4 &&
+        this.angleofApproch < (3 * Math.PI) / 4
+      ) {
         this.direction = 0;
-      } else if (this.angleofApproch >= (-3 * Math.PI) / 4 && this.angleofApproch < -Math.PI / 4) {
+      } else if (
+        this.angleofApproch >= (-3 * Math.PI) / 4 &&
+        this.angleofApproch < -Math.PI / 4
+      ) {
         this.direction = 1;
       } else {
         this.direction = 2;
       }
-      this.dmgTaken(player.attack(this.positionX, this.positionY), player.direction);
+      this.dmgTaken(
+        player.attack(this.positionX, this.positionY),
+        player.direction
+      );
 
       if (this.gameframe % (this.velocity * 4) === 0) {
         if (this.frame < 3) this.frame++;
@@ -75,7 +95,10 @@ class Enemy {
   }
 
   attack() {
-    if (distanceBtw(this.positionX, this.positionY, this.playerX, this.playerY) < 50) {
+    if (
+      distanceBtw(this.positionX, this.positionY, this.playerX, this.playerY) <
+      50
+    ) {
       return this.attackDmg;
     }
   }
@@ -120,8 +143,8 @@ class Enemy {
         this.frame * 16,
         this.width,
         this.height,
-        this.positionX + this.offsetX,
-        this.positionY + this.offsetY,
+        this.positionX,
+        this.positionY,
         this.width * 4,
         this.height * 4
       );
