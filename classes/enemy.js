@@ -6,10 +6,10 @@ class Enemy {
     this.hitEffectAni.src = `./NinjaAdventure/FX/SlashFx/CircularSlash/SpriteSheet.png`;
     this.playerX = canvasWidth / 2 - 16;
     this.playerY = canvasHeight / 2 - 16;
-    this.positionX = offsetX;
-    this.positionY = offsetY;
-    this.offsetX = 0;
-    this.offsetY = 0;
+    this.positionX = 0;
+    this.positionY = 0;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
     this.width = this.image.width / 4;
     this.height = this.image.height / 4;
     this.hp = hp;
@@ -37,7 +37,7 @@ class Enemy {
       this.playerX - this.positionX
     );
 
-    if (distance < this.range && this.alive === true) {
+    if (distance < this.range) {
       this.offsetX += Math.cos(this.angleofApproch) * this.velocity;
       this.offsetY += Math.sin(this.angleofApproch) * this.velocity;
 
@@ -75,7 +75,6 @@ class Enemy {
   dmgTaken(reciedDmg, direction) {
     if (reciedDmg !== undefined && this.hitCooldown.isCooldownElapsed()) {
       this.hitCooldown.updateActivationTime();
-      // this.hitEffect();
       this.hp -= reciedDmg;
       switch (direction) {
         case 0:
