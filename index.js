@@ -44,14 +44,16 @@ const player = new PlayerSpirit(
 
 spawnEnemy(map.enemyLocation, map.enemyLocationArray, offset);
 
+const WorldMap = new Game(canvasWidth, canvasHeight);
+
 const animation = () => {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
   const Array = {
     collisionBoundaryArray: [],
+    prev: [],
+    next: [],
   };
-
-  const WorldMap = new Game(canvasWidth, canvasHeight);
 
   switch (WorldMap.backgroundType) {
     case `HomeVillage`:
@@ -76,8 +78,20 @@ const animation = () => {
           );
           break;
         case 2:
+          Array.prev.push(
+            new CollisionBlock(
+              j * CollisionBlock.pixel + offset.positionX,
+              i * CollisionBlock.pixel + offset.positionY
+            )
+          );
           break;
         case 3:
+          Array.next.push(
+            new CollisionBlock(
+              j * CollisionBlock.pixel + offset.positionX,
+              i * CollisionBlock.pixel + offset.positionY
+            )
+          );
           break;
       }
     });
@@ -87,6 +101,28 @@ const animation = () => {
   WorldMap.draw(offset);
 
   Array.collisionBoundaryArray.forEach((item) => item.draw());
+  Array.prev.forEach((item) => {
+    item.draw();
+    if (
+      CollisionDetection(player, {
+        positionX: item.positionX,
+        positionY: item.positionY,
+      })
+    ) {
+      console.log(`prev`);
+    }
+  });
+  Array.next.forEach((item) => {
+    item.draw();
+    if (
+      CollisionDetection(player, {
+        positionX: item.positionX,
+        positionY: item.positionY,
+      })
+    ) {
+      console.log(`next`);
+    }
+  });
 
   map.enemyLocationArray.map((enemy, index) => {
     if (enemy.alive === false) map.enemyLocationArray.splice(index, 1);

@@ -505,7 +505,3 @@ const Route2Collisionarray = [];
 for (let i = 0; i < Route2Collision.length; i += 80) {
   Route2Collisionarray.push(Route2Collision.slice(i, i + 80));
 }
-
-console.log(Route2Collisionarray);
-console.log(HomeVillageCollisionarray);
-console.log(MainHousearray);

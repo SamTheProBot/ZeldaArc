@@ -2,7 +2,7 @@ class Game {
   constructor(canvasWidth, canvasHeight) {
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
-    this.backgroundType = `MainHouse`;
+    this.backgroundType = `HomeVillage`;
     this.background = null;
   }
 
