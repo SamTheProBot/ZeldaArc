@@ -45,7 +45,6 @@ const player = new PlayerSpirit(
 spawnEnemy(map.enemyLocation, map.enemyLocationArray, offset);
 
 const WorldMap = new Game(canvasWidth, canvasHeight);
-
 const animation = () => {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -55,7 +54,7 @@ const animation = () => {
     next: [],
   };
 
-  switch (WorldMap.backgroundType) {
+  switch (WorldMap.location[WorldMap.currentIndex]) {
     case `HomeVillage`:
       map.collisionBoundary = HomeVillageCollisionarray;
       map.enemyLocation = HomeVillageEnemyArray;
@@ -97,32 +96,30 @@ const animation = () => {
     });
   });
 
-  WorldMap.init(map.type);
   WorldMap.draw(offset);
 
   Array.collisionBoundaryArray.forEach((item) => item.draw());
   Array.prev.forEach((item) => {
-    item.draw();
     if (
       CollisionDetection(player, {
         positionX: item.positionX,
         positionY: item.positionY,
       })
     ) {
-      console.log(`prev`);
+      WorldMap.prevLocation();
     }
   });
   Array.next.forEach((item) => {
-    item.draw();
     if (
       CollisionDetection(player, {
         positionX: item.positionX,
         positionY: item.positionY,
       })
     ) {
-      console.log(`next`);
+      WorldMap.nextLocation();
     }
   });
+  console.log(WorldMap.location[WorldMap.currentIndex]);
 
   map.enemyLocationArray.map((enemy, index) => {
     if (enemy.alive === false) map.enemyLocationArray.splice(index, 1);
