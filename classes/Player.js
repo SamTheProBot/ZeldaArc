@@ -6,8 +6,8 @@ class PlayerSpirit {
     this.weapon.src = weaponsrc;
     this.hearts = new Image();
     this.hearts.src = `./NinjaAdventure/HUD/Heart.png`;
-    this.positionY = canvasHeight / 2 - 16;
     this.positionX = canvasWidth / 2 - 16;
+    this.positionY = canvasHeight / 2 - 16;
     this.weaponPosition = {
       angle: 0,
       x: 32,
@@ -38,8 +38,8 @@ class PlayerSpirit {
       0,
       this.width,
       this.height,
-      this.positionX - 325,
-      this.positionY - 210,
+      this.positionX - this.positionX * 0.9,
+      this.positionY - this.positionY * 0.9,
       this.width * 4,
       this.height * 4
     );
@@ -89,7 +89,10 @@ class PlayerSpirit {
         break;
     }
 
-    ctx.translate(this.positionX + this.weaponPosition.x, this.positionY + this.weaponPosition.y);
+    ctx.translate(
+      this.positionX + this.weaponPosition.x,
+      this.positionY + this.weaponPosition.y
+    );
     ctx.rotate(this.weaponPosition.angle);
     if (this.attackAnimation) {
       this.frame = 4;
@@ -139,8 +142,12 @@ class PlayerSpirit {
   attack(enemyX, enemyY) {
     if (
       this.attackAnimation === true &&
-      distanceBtw(this.positionX + this.weaponPosition.x, this.positionY + +this.weaponPosition.y, enemyX, enemyY) <
-        this.attackRange
+      distanceBtw(
+        this.positionX + this.weaponPosition.x,
+        this.positionY + +this.weaponPosition.y,
+        enemyX,
+        enemyY
+      ) < this.attackRange
     ) {
       return this.attackDmg;
     }

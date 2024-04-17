@@ -3,20 +3,28 @@ const canvas = document.querySelector(`#canvas1`);
 
 const ctx = canvas.getContext(`2d`);
 
-const canvasWidth = (canvas.width = 1200);
-const canvasHeight = (canvas.height = 750);
+const canvasWidth = (canvas.width = 1000);
+const canvasHeight = (canvas.height = 625);
+
+// const offset = {
+//   positionX: -200,
+//   positionY: -150,
+//   intialX: -200,
+//   intialY: -150,
+// };
 
 const offset = {
-  positionX: 0,
-  positionY: 0,
+  positionX: -540,
+  positionY: -460,
+  intialX: -540,
+  intialY: -460,
 };
 
 const playerProperty = {
-  velocity: 8,
+  velocity: 10,
 };
 
 const map = {
-  type: `HomeVillage`,
   collisionBoundary: HomeVillageCollisionarray,
   enemyLocation: HomeVillageEnemyArray,
   enemyLocationArray: [],
@@ -44,8 +52,9 @@ map.enemyLocation.forEach((axisY, i) => {
             `./NinjaAdventure/Actor/Monsters/Snake2/Snake2.png`,
             2,
             300,
-            offset.positionX + j * CollisionBlock.pixel,
-            offset.positionY + i * CollisionBlock.pixel
+            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
+            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
+            9
           )
         );
         break;
@@ -55,8 +64,9 @@ map.enemyLocation.forEach((axisY, i) => {
             `./NinjaAdventure/Actor/Monsters/BambooYellow/SpriteSheet.png`,
             4,
             250,
-            offset.positionX + j * CollisionBlock.pixel,
-            offset.positionY + i * CollisionBlock.pixel
+            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
+            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
+            7
           )
         );
         break;
@@ -66,8 +76,9 @@ map.enemyLocation.forEach((axisY, i) => {
             `./NinjaAdventure/Actor/Monsters/Mushroom/mushroom.png`,
             6,
             200,
-            offset.positionX + j * CollisionBlock.pixel,
-            offset.positionY + i * CollisionBlock.pixel
+            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
+            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
+            5
           )
         );
         break;
@@ -77,8 +88,9 @@ map.enemyLocation.forEach((axisY, i) => {
             `./NinjaAdventure/Actor/Monsters/Beast2/Beast2.png`,
             9,
             200,
-            offset.positionX + j * CollisionBlock.pixel,
-            offset.positionY + i * CollisionBlock.pixel
+            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
+            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
+            5
           )
         );
         break;
@@ -88,8 +100,9 @@ map.enemyLocation.forEach((axisY, i) => {
             `./NinjaAdventure/Actor/Monsters/SkullBlue/SpriteSheet.png`,
             7,
             200,
-            offset.positionX + j * CollisionBlock.pixel,
-            offset.positionY + i * CollisionBlock.pixel
+            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
+            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
+            9
           )
         );
         break;
@@ -99,8 +112,9 @@ map.enemyLocation.forEach((axisY, i) => {
             `./NinjaAdventure/Actor/Monsters/Spirit/SpriteSheet.png`,
             8,
             300,
-            offset.positionX + j * CollisionBlock.pixel,
-            offset.positionY + i * CollisionBlock.pixel
+            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
+            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
+            7
           )
         );
         break;
@@ -108,6 +122,7 @@ map.enemyLocation.forEach((axisY, i) => {
   });
 });
 
+console.log(map);
 const animation = () => {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -152,8 +167,8 @@ const animation = () => {
 
   Array.collisionBoundaryArray.forEach((item) => item.draw());
 
-  map.enemyLocationArray.map((enemy) => {
-    if (enemy.alive === false) map.enemyLocationArray.pop(enemy);
+  map.enemyLocationArray.map((enemy, index) => {
+    if (enemy.alive === false) map.enemyLocationArray.splice(index, 1);
     enemy.positionX = offset.positionX + enemy.offsetX;
     enemy.positionY = offset.positionY + enemy.offsetY;
     enemy.draw();

@@ -2,7 +2,7 @@ class Game {
   constructor(canvasWidth, canvasHeight) {
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
-    this.backgroundType = `HomeVillage`;
+    this.backgroundType = `MainHouse`;
     this.background = null;
   }
 
@@ -10,12 +10,12 @@ class Game {
     switch (this.backgroundType) {
       case `HomeVillage`:
         this.background = new Image();
-        this.background.src = `./Images/Homevillage/HomeVillage.png`;
+        this.background.src = `./Images/HomeVillage.png`;
         break;
 
       case `MainHouse`:
         this.background = new Image();
-        this.background.src = `./Images/Homevillage/MainHouse.png`;
+        this.background.src = `./Images/MainHouse.png`;
         break;
     }
   }

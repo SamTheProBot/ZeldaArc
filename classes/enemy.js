@@ -1,5 +1,5 @@
 class Enemy {
-  constructor(imagesrc, hp, range, offsetX, offsetY) {
+  constructor(imagesrc, hp, range, offsetX, offsetY, velocity) {
     this.image = new Image();
     this.image.src = imagesrc;
     this.hitEffectAni = new Image();
@@ -18,7 +18,7 @@ class Enemy {
     this.frame = 0;
     this.gameframe = 0;
     this.direction = 0;
-    this.velocity = 2;
+    this.velocity = Math.floor(0.34 * velocity);
     this.knockback = 70;
     this.alive = true;
     this.hitCooldown = new Cooldown(500);
@@ -36,6 +36,10 @@ class Enemy {
       this.playerY - this.positionY,
       this.playerX - this.positionX
     );
+
+    if (this.hp <= 0) {
+      this.alive = false;
+    }
 
     if (distance < this.range) {
       this.offsetX += Math.cos(this.angleofApproch) * this.velocity;
@@ -135,20 +139,16 @@ class Enemy {
   // }
 
   draw() {
-    if (this.hp > 0) {
-      ctx.drawImage(
-        this.image,
-        this.direction * 16,
-        this.frame * 16,
-        this.width,
-        this.height,
-        this.positionX,
-        this.positionY,
-        this.width * 4,
-        this.height * 4
-      );
-    } else {
-      this.alive = false;
-    }
+    ctx.drawImage(
+      this.image,
+      this.direction * 16,
+      this.frame * 16,
+      this.width,
+      this.height,
+      this.positionX,
+      this.positionY,
+      this.width * 4,
+      this.height * 4
+    );
   }
 }
