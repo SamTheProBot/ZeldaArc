@@ -1,4 +1,5 @@
 /** @type {HTMLCanvasElement} */
+const gameover = document.querySelector(`#overtitle`);
 const canvas = document.querySelector(`#canvas1`);
 
 const ctx = canvas.getContext(`2d`);
@@ -6,21 +7,14 @@ const ctx = canvas.getContext(`2d`);
 const canvasWidth = (canvas.width = 1000);
 const canvasHeight = (canvas.height = 625);
 
-// const offset = {
-//   positionX: -200,
-//   positionY: -150,
-//   intialX: -200,
-//   intialY: -150,
-// };
-
-const offset = {
+let offset = {
   positionX: -540,
   positionY: -460,
   intialX: -540,
   intialY: -460,
 };
 const playerProperty = {
-  velocity: 10,
+  velocity: 6,
 };
 
 const map = {
@@ -43,9 +37,11 @@ const player = new PlayerSpirit(
 );
 
 spawnEnemy(map.enemyLocation, map.enemyLocationArray, offset);
-
 const WorldMap = new Game(canvasWidth, canvasHeight);
+
 const animation = () => {
+  requestAnimationFrame(animation);
+
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
   const Array = {
@@ -55,14 +51,17 @@ const animation = () => {
   };
 
   switch (WorldMap.location[WorldMap.currentIndex]) {
-    case `HomeVillage`:
-      map.collisionBoundary = HomeVillageCollisionarray;
-      map.enemyLocation = HomeVillageEnemyArray;
-      break;
     case `MainHouse`:
       map.collisionBoundary = MainHousearray;
       map.enemyLocation = MainHouseEnemyarray;
       break;
+    case `HomeVillage`:
+      map.collisionBoundary = HomeVillageCollisionarray;
+      map.enemyLocation = HomeVillageEnemyArray;
+      break;
+    case `Route2`:
+      map.collisionBoundary = Route2Collisionarray;
+      map.enemyLocation = MainHouseEnemyarray;
   }
 
   map.collisionBoundary.forEach((axisY, i) => {
@@ -106,6 +105,7 @@ const animation = () => {
         positionY: item.positionY,
       })
     ) {
+      offset = WorldMap.offset;
       WorldMap.prevLocation();
     }
   });
@@ -116,10 +116,10 @@ const animation = () => {
         positionY: item.positionY,
       })
     ) {
+      offset = WorldMap.offset;
       WorldMap.nextLocation();
     }
   });
-  console.log(WorldMap.location[WorldMap.currentIndex]);
 
   map.enemyLocationArray.map((enemy, index) => {
     if (enemy.alive === false) map.enemyLocationArray.splice(index, 1);
@@ -133,10 +133,6 @@ const animation = () => {
   player.drawWeapon();
   player.draw();
   player.health();
-
-  if (!player.alive) {
-    window.location.reload();
-  }
 
   if (keys.PresssedW) {
     let collisionDetected = false;
@@ -210,7 +206,20 @@ const animation = () => {
       offset.positionX -= playerProperty.velocity;
     }
   }
-  requestAnimationFrame(animation);
+  if (!player.alive) {
+    let x = 100;
+    gameover.style.display = 'block';
+    setInterval(() => {
+      canvas.style.filter = `saturate(${x}%) blur(5px) opacity(80%)`;
+      x--;
+    }, 50);
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
+    map.enemyLocationArray = [];
+    cancelAnimationFrame(animation);
+  }
 };
 animation();
 
