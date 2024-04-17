@@ -5,7 +5,7 @@ class PlayerSpirit {
     this.weapon = new Image();
     this.weapon.src = weaponsrc;
     this.hearts = new Image();
-    this.hearts.src = `./NinjaAdventure/HUD/Heart.png`;
+    this.hearts.src = `./assets/HUD/Heart.png`;
     this.positionX = canvasWidth / 2 - 16;
     this.positionY = canvasHeight / 2 - 16;
     this.weaponPosition = {

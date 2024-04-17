@@ -19,7 +19,6 @@ const offset = {
   intialX: -540,
   intialY: -460,
 };
-
 const playerProperty = {
   velocity: 10,
 };
@@ -39,90 +38,12 @@ const keys = {
 };
 
 const player = new PlayerSpirit(
-  `/NinjaAdventure/Actor/Characters/Princess/SpriteSheet.png`,
-  `./NinjaAdventure/Items/Weapons/Sword2/Sprite.png`
+  `./assets/Actor/Characters/Princess/SpriteSheet.png`,
+  `./assets/Items/Weapons/Sword2/Sprite.png`
 );
 
-map.enemyLocation.forEach((axisY, i) => {
-  axisY.forEach((axisX, j) => {
-    switch (axisX) {
-      case 1:
-        map.enemyLocationArray.push(
-          new Enemy(
-            `./NinjaAdventure/Actor/Monsters/Snake2/Snake2.png`,
-            2,
-            300,
-            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
-            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
-            9
-          )
-        );
-        break;
-      case 2:
-        map.enemyLocationArray.push(
-          new Enemy(
-            `./NinjaAdventure/Actor/Monsters/BambooYellow/SpriteSheet.png`,
-            4,
-            250,
-            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
-            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
-            7
-          )
-        );
-        break;
-      case 3:
-        map.enemyLocationArray.push(
-          new Enemy(
-            `./NinjaAdventure/Actor/Monsters/Mushroom/mushroom.png`,
-            6,
-            200,
-            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
-            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
-            5
-          )
-        );
-        break;
-      case 4:
-        map.enemyLocationArray.push(
-          new Enemy(
-            `./NinjaAdventure/Actor/Monsters/Beast2/Beast2.png`,
-            9,
-            200,
-            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
-            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
-            5
-          )
-        );
-        break;
-      case 5:
-        map.enemyLocationArray.push(
-          new Enemy(
-            `./NinjaAdventure/Actor/Monsters/SkullBlue/SpriteSheet.png`,
-            7,
-            200,
-            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
-            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
-            9
-          )
-        );
-        break;
-      case 6:
-        map.enemyLocationArray.push(
-          new Enemy(
-            `./NinjaAdventure/Actor/Monsters/Spirit/SpriteSheet.png`,
-            8,
-            300,
-            j * CollisionBlock.pixel + offset.positionX - offset.intialX,
-            i * CollisionBlock.pixel + offset.positionY - offset.intialY,
-            7
-          )
-        );
-        break;
-    }
-  });
-});
+spawnEnemy(map.enemyLocation, map.enemyLocationArray, offset);
 
-console.log(map);
 const animation = () => {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
